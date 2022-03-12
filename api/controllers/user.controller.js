@@ -3,7 +3,7 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 
 exports.register = async (req, res) => {
-
+	console.log(req.body)
 	const user = new User(req.body)
 	if (req?.body?.password) {
 		user.hash_password = bcrypt.hashSync(req.body.password, 10)
