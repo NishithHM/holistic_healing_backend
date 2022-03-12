@@ -1,13 +1,13 @@
 const mongoose = require('mongoose');
 
-const timeslotSchema = new mongoose.Schema({
+const timeSlotSchema = new mongoose.Schema({
 	begin:{
-		type:Number,
+		type: String,
 		required:true,
 		trim:true
 	},
 	end:{
-		type:Number,
+		type:String,
 		required:true,
 		trim:true
 	}
@@ -43,8 +43,8 @@ const serviceSchema = new mongoose.Schema({
 		date:{
 			type:Date,
 		},
-		timeslots:[{
-			type:timeslotSchema,
+		timeSlots:[{
+			type:timeSlotSchema,
 			required:true,
 		}],
 		maxAppointmentPerSlot:{

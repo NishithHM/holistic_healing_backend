@@ -1,31 +1,29 @@
+const dayjs = require('dayjs');
 const Services = require('../models/services.model');
-
-function formatData(){
-	
-}
 
 exports.createService = async (req, res) => {
 	try {
 		const service = new Services(req.body)
+		const {maxAppointmentPerSlot, date, timeRange, sessionTimings} =req.body
 		service.createdBy = req.user._id;
 		service.isActive = true;
-		service.appointment.maxAppointmentPerSlot = req.body.maxAppointmentPerSlot;
-		service.appointment.date = req.body.date;
-
-		var begin = req.body.timeRange[0]*60;
-		var end = req.body.timeRange[1]*60;
-		const numOfSlots = (end - begin) / req.body.sessionTimings;
-
-		for (var i = 0; i < numOfSlots; i++) {
-			const timeslot = {
-				begin: begin,
-				end: begin + req.body.sessionTimings
+		service.appointment.maxAppointmentPerSlot = maxAppointmentPerSlot;
+		service.appointment.date = date;
+		const [startTime, endTime] = timeRange
+		const startTimeFormatted = dayjs(`${dayjs().format('YYYY-MM-DD')} ${startTime}`, 'HH:mm')
+		const endTimeFormatted = dayjs(`${dayjs().format('YYYY-MM-DD')} ${endTime}`, 'HH:mm')
+		const slots = [];
+		let pointerTime = startTimeFormatted;
+		while(endTimeFormatted.diff(pointerTime, 'minutes') >0){
+			const endPointer = pointerTime.add(sessionTimings, 'minutes')
+			const slot = {
+				begin: pointerTime.format('HH:mm'),
+				end: endPointer.format('HH:mm')
 			}
-			begin = begin + req.body.sessionTimings;
-			service.appointment.timeslots.push(timeslot)
+			slots.push(slot)
+			pointerTime = endPointer;
 		}
-		console.log(service)
-
+		service.appointment.timeSlots = slots;
 		await service.save();
 		res.status(201).send({ "msg": "Saved Successfully", "_id": service._id })
 	} catch (error) {
