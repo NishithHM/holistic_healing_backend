@@ -3,7 +3,8 @@ const Services = require('../models/services.model');
 exports.createService = async (req, res) => {
 	try {
 		const service = new Services(req.body)
-		service.updatedBy = req.user._id;
+		service.createdBy = req.user._id;
+		service.isActive = true
 		//console.log(req.user)
 		await service.save();
 		res.status(201).send({ "msg": "Saved Successfully", "_id": service._id })
@@ -17,6 +18,7 @@ exports.updateService = async (req, res) => {
 	try {
 		var service = req.body;
 		service.updatedBy = req.user._id;
+		service.isActive = true;
 		await Services.findByIdAndUpdate(serviceId, service)
 		res.status(500).send("updated successfully")
 	} catch (error) {
@@ -38,7 +40,9 @@ exports.getServices = async (req, res) => {
 exports.deleteServiceById = async (req, res) => {
 	const serviceId = req.params.serviceId;
 	try {
-		Services.findByIdAndUpdate(serviceId, req.params.body);
+		const data = await findOne({_id:serviceId})
+		data.isActive= false
+		Services.findByIdAndUpdate(serviceId, data);
 		res.status(201).send("Deleted Successfully")
 	} catch (error) {
 		res.status(500).send(error)

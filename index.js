@@ -6,7 +6,7 @@ const dotenv = require('dotenv')
 const dbCon = require('./db/connection')
 const app = express()
 dotenv.config({ path: './.env' })
-const port = 3000 || process.env.PORT;
+const port = process.env.PORT;
 app.use(cors())
 app.use(bodyParser.json({ limit: '50mb' }))
 app.use(router)

@@ -12,6 +12,9 @@ const serviceSchema = new mongoose.Schema({
 		type: Number,
 		required: true,
 	},
+	isActive:{
+		type: Boolean,
+	},
 	details: {
 		type: String,
 		required: true,
@@ -20,12 +23,10 @@ const serviceSchema = new mongoose.Schema({
 		type: String,
 		trim: true,
 	},
-	timeSlot:[{}],
-	// assignedTo:[{
-	// 	type:ObjectId,
-	// 	required:true,
-	// }]
+	createdBy: {
+		type: String,
+		trim: true,
+	},
 
-
-})
+}, {timestamps:true})
 module.exports = mongoose.model('services', serviceSchema)
