@@ -1,3 +1,4 @@
+const { ObjectId } = require('mongodb');
 const mongoose = require('mongoose');
 
 const timeSlotSchema = new mongoose.Schema({
@@ -32,11 +33,11 @@ const serviceSchema = new mongoose.Schema({
 		required: true,
 	},
 	updatedBy: {
-		type: String,
+		type: ObjectId,
 		trim: true,
 	},
 	createdBy: {
-		type: String,
+		type: ObjectId,
 		trim: true,
 	},
 	appointment:{
