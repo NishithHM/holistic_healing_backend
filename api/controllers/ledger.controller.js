@@ -2,35 +2,29 @@ const Ledgers = require('../models/leger.model')
 const Services = require('../models/services.model')
 const dayjs = require('dayjs');
 
-async function isBooked(date, begin, end, serviceID) {
+async function isBooked({date, startTime, endTime, serviceID}) {
     const bookedSlots = await Ledgers.count(
         {
-            date: date,
-            timings: {
-                begin: begin,
-                end:end
-            },
-            serviceID:serviceID
+            date,
+            startTime,
+			endTime,
+            serviceID,
         })
-    const service = await Services.findOne({serviceID:serviceID})
-    console.log(service.maxAppointmentPerSlot)
-    console.log(bookedSlots)
-    return false;
+    const service = await Services.findOne({serviceID:serviceID })
+	console.log(service.appointment)
+    return bookedSlots >= service.appointment.maxAppointmentPerSlot
 }
 
 exports.bookTheSlot = async (req, res) => {
     try {
-        var ledger = new Ledgers(req.body);
-        let date = new Date();
-        if (ledger.date == null) {
-            ledger.date = dayjs();
-        }
+        const ledger = new Ledgers(req.body);
         ledger.userId = req.user._id;
-        if (isBooked(ledger.date, ledger.timings.begin, ledger.timings.end, ledger.serviceID)) {
-          //  res.status(403).send("Already booked ny someone else")
-        }
+        if (await isBooked(req.body)) {
+           res.status(403).send("Selected slot not available")
+        }else{
         await ledger.save();
         res.status(201).send("booked successfully")
+		}
     } catch (error) {
         console.log(error)
         res.status(500).send(error)

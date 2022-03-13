@@ -6,30 +6,20 @@ const ledgerSchema = new mongoose.Schema({
         required: true,
         type: ObjectId,
     },
-    serviceID: {
+    serviceId: {
         required: true,
         type: ObjectId,
     },
-    date: {
-        type: Date,
-        required: true,
-    },
-    timings:{
-        begin: {
-            type: String,
-            required: true,
-            trim: true
-        },
-        end: {
-            type: String,
-            required: true,
-            trim: true
-        }
-    },
     
+	startTime:{
+		type: Date,
+	},
+	endTime:{
+		type: Date
+	}
 
 },{timestamps:true})
 
-//ledgerSchema.index({serviceID:1,date:1,timings:1,userId:1},{unique:true})
+ledgerSchema.index({serviceID:1, startTime:1, endTime:1,userId:1},{unique:true})
 
 module.exports = mongoose.model("Ledger",ledgerSchema);

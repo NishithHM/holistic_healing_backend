@@ -18,5 +18,5 @@ router.get('/api/get/service/', authentication.ensureRole(['superAdmin', 'user',
 router.delete('/api/delete/service/:serviceId',authentication.ensureRole(['superAdmin']), serviceHandler.deleteServiceById)
 
 //Booking 
-router.post('/api/create/bookTheSlot',authentication.ensureRole(['user']),LedgerHandler.bookTheSlot);
+router.post('/api/create/booking',authentication.ensureRole(['user']),LedgerHandler.bookTheSlot);
 module.exports = router

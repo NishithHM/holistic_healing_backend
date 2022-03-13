@@ -1,18 +1,18 @@
 const { ObjectId } = require('mongodb');
 const mongoose = require('mongoose');
 
-const timeSlotSchema = new mongoose.Schema({
-	begin:{
-		type: String,
-		required:true,
-		trim:true
-	},
-	end:{
-		type:String,
-		required:true,
-		trim:true
-	}
-})
+// const timeSlotSchema = new mongoose.Schema({
+// 	begin:{
+// 		type: String,
+// 		required:true,
+// 		trim:true
+// 	},
+// 	end:{
+// 		type:String,
+// 		required:true,
+// 		trim:true
+// 	}
+// })
 
 const serviceSchema = new mongoose.Schema({
 	name: {
@@ -45,8 +45,16 @@ const serviceSchema = new mongoose.Schema({
 			type:Date,
 		},
 		timeSlots:[{
-			type:timeSlotSchema,
-			required:true,
+			begin:{
+				type: String,
+				trim: true,
+				required: true
+			},
+			end:{
+				type: String,
+				trim: true,
+				required: true
+			}
 		}],
 		maxAppointmentPerSlot:{
 			type:Number,

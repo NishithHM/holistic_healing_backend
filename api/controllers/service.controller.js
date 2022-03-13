@@ -31,7 +31,7 @@ function formatData(data) {
 exports.createService = async (req, res) => {
 	try {
 		const service = formatData(req);
-		service.createdBy = data.user._id;
+		service.createdBy = req.user._id;
 		await service.save();
 		res.status(201).send({ "msg": "Saved Successfully", "_id": service._id })
 	} catch (error) {
