@@ -2,16 +2,16 @@ const Ledgers = require('../models/leger.model')
 const Services = require('../models/services.model')
 const dayjs = require('dayjs');
 const { isEqual } = require('lodash');
+const { ObjectId } = require('mongodb');
 
-async function isBooked({date, startTime, endTime, serviceID}) {
+async function isBooked({startTime, endTime, serviceId}) {
     const bookedSlots = await Ledgers.count(
         {
-            date,
             startTime,
 			endTime,
-            serviceID,
+            serviceId,
         })
-    const service = await Services.findOne({serviceID:serviceID })
+    const service = await Services.findById(serviceId)
 	const startTimeVal = dayjs(startTime, 'YYYY-MM-DD HH:mm').format('HH:mm')
 	const endTimeVal = dayjs(endTime, 'YYYY-MM-DD HH:mm').format('HH:mm')
 	const requestedSlot = {begin:startTimeVal, end:endTimeVal}
@@ -39,4 +39,25 @@ exports.bookTheSlot = async (req, res) => {
         res.status(500).send(error)
     }
 
+}
+
+exports.getAvailableSlots = async (req, res)=>{
+		const {serviceId, date} = req.query
+		console.log(serviceId, date)
+		const service = await Services.findById(serviceId)
+		const slots = service.appointment.timeSlots
+		const trimmedSlot = slots.map(ele=> {
+			const {begin, end} = ele
+			return {startTime: dayjs(`${date} ${begin}`).format('YYYY-MM-DD HH:mm'),
+			 endTime:dayjs(`${date} ${end}`).format('YYYY-MM-DD HH:mm')}
+		})
+		const availableRes = []
+		for(let i=0; i< trimmedSlot.length; i++){
+		const bookedCount = await Ledgers.count(trimmedSlot[i])
+			availableRes.push({
+				...trimmedSlot[i],
+				remainingSlots: service?.appointment?.maxAppointmentPerSlot - bookedCount
+			})
+	   }
+	res.json({slots:availableRes, serviceId})
 }
