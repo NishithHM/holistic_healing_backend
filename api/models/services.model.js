@@ -1,19 +1,6 @@
 const { ObjectId } = require('mongodb');
 const mongoose = require('mongoose');
 
-// const timeSlotSchema = new mongoose.Schema({
-// 	begin:{
-// 		type: String,
-// 		required:true,
-// 		trim:true
-// 	},
-// 	end:{
-// 		type:String,
-// 		required:true,
-// 		trim:true
-// 	}
-// })
-
 const serviceSchema = new mongoose.Schema({
 	name: {
 		type: String,
