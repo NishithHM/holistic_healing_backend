@@ -49,6 +49,7 @@ exports.getAvailableSlots = async (req, res)=>{
 		const {serviceId, date} = req.query
 		console.log(serviceId, date)
 		const service = await Services.findById(serviceId)
+		if(service){
 		const slots = service.appointment.timeSlots
 		const trimmedSlot = slots.map(ele=> {
 			const {begin, end} = ele
@@ -64,4 +65,7 @@ exports.getAvailableSlots = async (req, res)=>{
 			})
 	   }
 	res.json({slots:availableRes, serviceId})
+	}else{
+		res.json({slots:[], serviceId})
+	}
 }
