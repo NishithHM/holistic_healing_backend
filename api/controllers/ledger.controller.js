@@ -5,7 +5,8 @@ const { isEqual } = require('lodash');
 const { ObjectId } = require('mongodb');
 
 async function isBooked({startTime, endTime, serviceId}) {
-    const bookedSlots = await Ledgers.count(
+   try {
+	const bookedSlots = await Ledgers.count(
         {
             startTime,
 			endTime,
@@ -22,6 +23,10 @@ async function isBooked({startTime, endTime, serviceId}) {
 	})
 	const isInValidSlot = !trimmedSlot.some(ele=> isEqual(ele, requestedSlot))
     return bookedSlots >= service.appointment.maxAppointmentPerSlot || isInValidSlot
+	   
+   } catch (error) {
+	   return null
+   }
 }
 
 exports.bookTheSlot = async (req, res) => {
@@ -35,10 +40,9 @@ exports.bookTheSlot = async (req, res) => {
         res.status(201).send("booked successfully")
 		}
     } catch (error) {
-        // console.log(error)
+        	 console.log(error)
         res.status(500).send(error)
     }
-
 }
 
 exports.getAvailableSlots = async (req, res)=>{

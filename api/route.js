@@ -4,6 +4,7 @@ const userHandler = require('./controllers/user.controller');
 const serviceHandler = require('./controllers/service.controller')
 const authentication = require('./controllers/auth.controllers');
 const LedgerHandler = require('./controllers/ledger.controller')
+const holidayHandler = require('./controllers/holiday.controller')
 
 
 // user
@@ -20,4 +21,8 @@ router.delete('/api/delete/service/:serviceId',authentication.ensureRole(['super
 //Booking 
 router.post('/api/create/booking',authentication.ensureRole(['user']),LedgerHandler.bookTheSlot);
 router.get('/api/get/availableSlots', authentication.ensureRole(['superAdmin', 'user', 'admin']), LedgerHandler.getAvailableSlots)
+
+//UpdateHoliday
+router.post('/api/create/holiday',authentication.ensureRole(['superAdmin']),holidayHandler.updateLedgerOnHoliday)
+
 module.exports = router

@@ -43,6 +43,7 @@ const serviceSchema = new mongoose.Schema({
 	appointment:{
 		date:{
 			type:Date,
+			
 		},
 		timeSlots:[{
 			begin:{

@@ -10,13 +10,16 @@ const ledgerSchema = new mongoose.Schema({
         required: true,
         type: ObjectId,
     },
-    
 	startTime:{
 		type: Date,
 	},
 	endTime:{
 		type: Date
-	}
+	},
+    isBooked:{
+        type:Boolean,
+        default:true,
+    }
 
 },{timestamps:true})
 
