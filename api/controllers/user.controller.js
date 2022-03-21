@@ -4,20 +4,16 @@ const jwt = require('jsonwebtoken');
 
 exports.register = async (req, res) => {
 	//console.log(req.body)
-	const {name,phoneNumber,email,role,password} = req.body;
-	if (password == undefined || role == undefined){
-		password = phoneNumber;
+	var { name, phoneNumber, email, role, password } = req.body;
+
+	if (password == undefined || role == undefined) {
+		password = phoneNumber.toString();
 		role = "user";
 	}
-	const user = new User({name,phoneNumber,email,role,password});
+	const hash_password = bcrypt.hashSync(password, 10)
+	const isActive = true;
+	const user = new User({ name, phoneNumber, email, role, isActive, hash_password });
 
-
-	if (req?.body?.password) {
-		user.hash_password = bcrypt.hashSync(req.body.password, 10)
-		user.isActive = true
-	} else {
-		res.status(400).send("Password required")
-	}
 	try {
 		await user.save()
 		res.status(201).json({

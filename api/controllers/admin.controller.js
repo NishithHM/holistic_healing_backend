@@ -2,6 +2,8 @@
 
 //admin will get all infos about who booked,slotTimings,,serviceName,
 const User = require('../models/user.model')
+const LedgerHandler = require('../controllers/ledger.controller')
+
 
 exports.getUserByPhone = async (req, res) => {
     const phoneNumber = req.params.phoneNumber;
@@ -22,5 +24,5 @@ exports.getUserByPhone = async (req, res) => {
 
 
 exports.bookByAdmin = async (req,res)=>{
-
+    
 }

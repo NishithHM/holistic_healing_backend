@@ -37,15 +37,12 @@ const userSchema = new mongoose.Schema({
 	isActive:{
 		type: Boolean,
 		required: true,
+		default:true
 	},
 	hash_password:{
 		type: String,
 		required: true,
 	},
-	token:[{
-		Type:String,
-	}]
-
 }, {
 	timestamps: true
 })
