@@ -16,6 +16,10 @@ const ledgerSchema = new mongoose.Schema({
 	endTime:{
 		type: Date
 	},
+    bookedBy:{
+        type:ObjectId,
+        required:true,
+    },
     isBooked:{
         type:Boolean,
         default:true,

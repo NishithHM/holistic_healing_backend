@@ -24,3 +24,12 @@ exports.updateLedgerOnHoliday = async (req, res) => {
         res.status(500).send(error)
     }
 }
+
+exports.getHoliday = async(req,res)=>{
+    try {
+        const holidayLists = await HolidayList.find();
+        res.status(201).send(holidayLists)
+    } catch (error) {
+        res.status(500).send(error)
+    }
+}

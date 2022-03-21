@@ -20,11 +20,12 @@ router.get('/api/get/service/', authentication.ensureRole(['superAdmin', 'user',
 router.delete('/api/delete/service/:serviceId',authentication.ensureRole(['superAdmin']), serviceHandler.deleteServiceById)
 
 //Booking 
-router.post('/api/create/booking/:phoneNumber',authentication.ensureRole(['user','admin']),LedgerHandler.bookTheSlot);
+router.post('/api/create/booking/',authentication.ensureRole(['user','admin']),LedgerHandler.bookTheSlot);
 router.get('/api/get/availableSlots', authentication.ensureRole(['superAdmin', 'user', 'admin']), LedgerHandler.getAvailableSlots)
 
-//UpdateHoliday
+//Holiday
 router.post('/api/create/holiday',authentication.ensureRole(['superAdmin']),holidayHandler.updateLedgerOnHoliday)
+router.get('/api/get/holidayList',authentication.ensureRole(['superAdmin', 'user', 'admin']),holidayHandler.getHoliday)
 
 //Admin
 router.get('/api/get/user/:phoneNumber',authentication.ensureRole(['superAdmin','admin']),adminHandler.getUserByPhone)

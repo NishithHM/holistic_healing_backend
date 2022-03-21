@@ -23,6 +23,3 @@ exports.getUserByPhone = async (req, res) => {
 }
 
 
-exports.bookByAdmin = async (req,res)=>{
-    
-}
