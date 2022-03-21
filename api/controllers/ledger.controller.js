@@ -2,7 +2,6 @@ const Ledgers = require('../models/leger.model')
 const Services = require('../models/services.model')
 const dayjs = require('dayjs');
 const { isEqual } = require('lodash');
-const { ObjectId } = require('mongodb');
 
 async function isBooked({startTime, endTime, serviceId}) {
    try {
@@ -32,6 +31,7 @@ async function isBooked({startTime, endTime, serviceId}) {
 exports.bookTheSlot = async (req, res) => {
     try {
         const ledger = new Ledgers(req.body);
+		console.log(req.user)
         ledger.userId = req.user._id;
         if (await isBooked(req.body)) {
            res.status(403).send("Selected slot not available")

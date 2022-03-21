@@ -3,8 +3,15 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 
 exports.register = async (req, res) => {
-	console.log(req.body)
-	const user = new User(req.body)
+	//console.log(req.body)
+	const {name,phoneNumber,email,role,password} = req.body;
+	if (password == undefined || role == undefined){
+		password = phoneNumber;
+		role = "user";
+	}
+	const user = new User({name,phoneNumber,email,role,password});
+
+
 	if (req?.body?.password) {
 		user.hash_password = bcrypt.hashSync(req.body.password, 10)
 		user.isActive = true
