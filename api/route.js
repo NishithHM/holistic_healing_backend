@@ -7,11 +7,16 @@ const LedgerHandler = require('./controllers/ledger.controller')
 const holidayHandler = require('./controllers/holiday.controller');
 const adminHandler = require('./controllers/admin.controller')
 
+const multer  = require('multer')
+const upload = multer({ dest: 'uploads/' })
+
 
 // user
 router.post('/api/create/user', userHandler.register)
 router.post('/api/signIn/user', userHandler.signIn)
 router.get('/api/user', authentication.ensureRole(['superAdmin', 'user', 'admin']), userHandler.getUser)
+router.get('/api/get/user/:phoneNumber',authentication.ensureRole(['superAdmin','admin']),userHandler.getUserByPhone)
+
 
 // services
 router.post('/api/create/service', authentication.ensureRole(['superAdmin']), serviceHandler.createService)
@@ -28,6 +33,6 @@ router.post('/api/create/holiday',authentication.ensureRole(['superAdmin']),holi
 router.get('/api/get/holidayList',authentication.ensureRole(['superAdmin', 'user', 'admin']),holidayHandler.getHoliday)
 
 //Admin
-router.get('/api/get/user/:phoneNumber',authentication.ensureRole(['superAdmin','admin']),adminHandler.getUserByPhone)
+router.post('/api/get/adminStats',authentication.ensureRole(['superAdmin','admin']),adminHandler.adminStats)
 
 module.exports = router

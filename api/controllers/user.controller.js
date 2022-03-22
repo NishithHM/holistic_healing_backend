@@ -66,5 +66,20 @@ exports.getUser = async (req, res) => {
 	}
 
 }
+exports.getUserByPhone = async (req, res) => {
+    const phoneNumber = req.params.phoneNumber;
+	try {
+		const user = await User.findOne({
+			phoneNumber
+		})
+		if (user) {
+			res.status(201).json(user)
+		} else {
+			res.status(204).send('Not Yet Registered')
+		}
+	} catch (error) {
+		res.status(401).send(error)
+	}
+}
 
 

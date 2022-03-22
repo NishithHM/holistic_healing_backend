@@ -33,6 +33,7 @@ exports.bookTheSlot = async (req, res) => {
         const ledger = new Ledgers(req.body);
         ledger.userId = req.body.userId;
 		ledger.bookedBy = req.user._id;
+		console.log(ledger)
         if (await isBooked(req.body)) {
            res.status(403).send("Selected slot not available")
         }else{
@@ -49,12 +50,13 @@ exports.getAvailableSlots = async (req, res)=>{
 		const {serviceId, date} = req.query
 		console.log(serviceId, date)
 		const service = await Services.findById(serviceId)
+		console.log(service)
 		if(service){
 		const slots = service.appointment.timeSlots
 		const trimmedSlot = slots.map(ele=> {
 			const {begin, end} = ele
 			return {startTime: dayjs(`${date} ${begin}`).format('YYYY-MM-DD HH:mm'),
-			 endTime:dayjs(`${date} ${end}`).format('YYYY-MM-DD HH:mm')}
+			 endTime:dayjs(`${date} ${end}`).format('YYYY-MM-DD HH:mm'), isBooked:true}
 		})
 		const availableRes = []
 		for(let i=0; i< trimmedSlot.length; i++){
