@@ -2,6 +2,8 @@ const Ledgers = require('../models/leger.model')
 const Services = require('../models/services.model')
 const dayjs = require('dayjs');
 const { isEqual } = require('lodash');
+const utc = require('dayjs/plugin/utc')
+dayjs.extend(utc)
 
 async function isBooked({startTime, endTime, serviceId}) {
    try {
@@ -12,8 +14,16 @@ async function isBooked({startTime, endTime, serviceId}) {
             serviceId,
         })
     const service = await Services.findById(serviceId)
-	const startTimeVal = dayjs(startTime, 'YYYY-MM-DD HH:mm').format('HH:mm')
-	const endTimeVal = dayjs(endTime, 'YYYY-MM-DD HH:mm').format('HH:mm')
+	
+	if(service == null){
+		return true;
+	}
+	const startTimeVal = dayjs(startTime).format('HH:mm')
+	const endTimeVal = dayjs(endTime).format('HH:mm')
+	
+	// const startTimeVal1 = dayjs(dayjs.utc(startTime)).format('HH:mm')
+	// const endTimeVal1 = dayjs(dayjs.utc(endTime)).format('HH:mm')
+	// console.log(startTimeVal1,endTimeVal1)
 	const requestedSlot = {begin:startTimeVal, end:endTimeVal}
 	const slots= service?.appointment?.timeSlots
 	const trimmedSlot = slots.map(ele=> {
@@ -24,7 +34,7 @@ async function isBooked({startTime, endTime, serviceId}) {
     return bookedSlots >= service.appointment.maxAppointmentPerSlot || isInValidSlot
 	   
    } catch (error) {
-	   return null
+	   return error
    }
 }
 
@@ -33,7 +43,7 @@ exports.bookTheSlot = async (req, res) => {
         const ledger = new Ledgers(req.body);
         ledger.userId = req.body.userId;
 		ledger.bookedBy = req.user._id;
-		console.log(ledger)
+		
         if (await isBooked(req.body)) {
            res.status(403).send("Selected slot not available")
         }else{
@@ -69,5 +79,15 @@ exports.getAvailableSlots = async (req, res)=>{
 	res.json({slots:availableRes, serviceId})
 	}else{
 		res.json({slots:[], serviceId})
+	}
+}
+exports.CancelSlot = async (req,res)=>{
+
+	try {
+		const ledger = await Ledgers.findByIdAndUpdate(req.body.ledgerId,{isBooked:false},{new: true})
+		res.status(201).send(ledger)
+	
+	} catch (error) {
+		res.status(500).send(error)
 	}
 }

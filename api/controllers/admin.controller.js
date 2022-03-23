@@ -10,8 +10,15 @@ const Ledgers = require('../models/leger.model')
 
 exports.adminStats = async (req, res) => {
 	// testing Phase
-	const userId = "622d63d3a4c8d51fbc654eb6";
-	const ledger = await Ledgers.find({ userId });
+	
+
+	var queryObj;
+	if(req.body.userId!= null){
+		queryObj = {userId:req.body.userId}
+	}
+	queryObj+={isBooked:true}
+	console.log(queryObj)
+	const ledger = await Ledgers.find( queryObj );
 	console.log(ledger)
 	res.status(201).send(ledger)
 	//upload.single('Image')

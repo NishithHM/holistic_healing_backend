@@ -48,6 +48,11 @@ const serviceSchema = new mongoose.Schema({
 			type:Number,
 			trim:true,
 		}
+	},
+	locationLink:{
+		type:String,
+		trim:true,
+		required:true,
 	}
 
 }, {timestamps:true})

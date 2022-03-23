@@ -1,4 +1,8 @@
 const dayjs = require('dayjs');
+const utc = require('dayjs/plugin/utc')
+dayjs.extend(utc)
+
+
 const Services = require('../models/services.model');
 function formatData(data) {
 	const service = new Services()
@@ -13,6 +17,7 @@ function formatData(data) {
 	const [startTime, endTime] = timeRange
 	const startTimeFormatted = dayjs(`${dayjs().format('YYYY-MM-DD')} ${startTime}`, 'HH:mm')
 	const endTimeFormatted = dayjs(`${dayjs().format('YYYY-MM-DD')} ${endTime}`, 'HH:mm')
+	
 	const slots = [];
 	let pointerTime = startTimeFormatted;
 	while (endTimeFormatted.diff(pointerTime, 'minutes') > 0) {
@@ -20,10 +25,14 @@ function formatData(data) {
 		const slot = {
 			begin: pointerTime.format('HH:mm'),
 			end: endPointer.format('HH:mm')
+			// begin: dayjs(dayjs.utc(pointerTime)).format('HH:mm'),
+			// end: dayjs(dayjs.utc(endPointer)).format('HH:mm')
 		}
+		
 		slots.push(slot)
 		pointerTime = endPointer;
 	}
+	console.log(slots)
 	service.appointment.timeSlots = slots;
 	return service;
 }
