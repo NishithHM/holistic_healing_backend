@@ -6,7 +6,7 @@ dayjs.extend(utc)
 const Services = require('../models/services.model');
 function formatData(data) {
 	const service = new Services()
-	const { maxAppointmentPerSlot, date, timeRange, sessionTimings, price, details, name } = data.body
+	const { maxAppointmentPerSlot, date, timeRange, sessionTimings, price, details, name, isDaily, locationLink } = data.body
 	service.price = price;
 	service.details = details;
 	service.name = name;
@@ -14,6 +14,8 @@ function formatData(data) {
 	service.isActive = true;
 	service.appointment.maxAppointmentPerSlot = maxAppointmentPerSlot;
 	service.appointment.date = date;
+	service.appointment.isDaily = isDaily;
+	service.locationLink = locationLink;
 	const [startTime, endTime] = timeRange
 	const startTimeFormatted = dayjs(`${dayjs().format('YYYY-MM-DD')} ${startTime}`, 'HH:mm')
 	const endTimeFormatted = dayjs(`${dayjs().format('YYYY-MM-DD')} ${endTime}`, 'HH:mm')
