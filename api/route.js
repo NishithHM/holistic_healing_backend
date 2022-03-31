@@ -8,13 +8,16 @@ const holidayHandler = require('./controllers/holiday.controller');
 const adminHandler = require('./controllers/admin.controller');
 
 const multer = require('multer');
+const path = require('path')
 
 const fileStorageEngine = multer.diskStorage({
 	destination:(req,file,cb) =>{
-		cb(null,'./uploads');
+		cb(null,path.join(__dirname,'./uploads'))
+
 	},
 	filename:(req,file,cb)=>{
-		cb(null,file.originalname);
+		cb(null,Date.now() + path.extname(file.originalname))
+
 	}
 })
 const upload = multer({storage:fileStorageEngine})
@@ -47,8 +50,7 @@ router.post('/api/get/adminStats',authentication.ensureRole(['superAdmin','admin
 
 
 router.post('/api/temp',upload.single('image'),function(req,res){
-	console.log("sdf")
-	console.log(req.file);
+res.status(201).send(req.file)
 
 })
 
