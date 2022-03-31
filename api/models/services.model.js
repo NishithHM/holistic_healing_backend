@@ -30,7 +30,10 @@ const serviceSchema = new mongoose.Schema({
 	appointment:{
 		date:{
 			type:Date,
-			
+		},
+		isDaily:{
+			type: Boolean,
+			default: false
 		},
 		timeSlots:[{
 			begin:{
@@ -53,7 +56,7 @@ const serviceSchema = new mongoose.Schema({
 		type:String,
 		trim:true,
 		required:true,
-	}
+	},
 
 }, {timestamps:true})
 module.exports = mongoose.model('services', serviceSchema)
