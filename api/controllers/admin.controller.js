@@ -1,9 +1,9 @@
 // display list of services on INPUT DATE -> display number of booking for all the slots
 
 //admin will get all infos about who booked,slotTimings,serviceName,
-const User = require('../models/user.model')
-const LedgerHandler = require('../controllers/ledger.controller')
-const Ledgers = require('../models/leger.model')
+
+const Ledgers = require('../models/leger.model');
+
 
 exports.adminStats = async (req, res) => {
 	// testing Phase
@@ -45,6 +45,12 @@ exports.adminStats = async (req, res) => {
 		res.status(500).send(error)
 	}
 }
+exports.temp = function(req,res){
+	
 
+	console.log("sdf")
+	console.log(req.file);
+
+}
 
 

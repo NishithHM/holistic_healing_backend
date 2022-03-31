@@ -5,11 +5,19 @@ const serviceHandler = require('./controllers/service.controller')
 const authentication = require('./controllers/auth.controllers');
 const LedgerHandler = require('./controllers/ledger.controller')
 const holidayHandler = require('./controllers/holiday.controller');
-const adminHandler = require('./controllers/admin.controller')
+const adminHandler = require('./controllers/admin.controller');
 
-const multer  = require('multer')
-const upload = multer({ dest: 'uploads/' })
-
+const multer = require('multer');
+const fileStorageEngine = multer.diskStorage({
+	destination:(req,file,cb) =>{
+		cb(null,'./uploads');
+	},
+	filename:(req,file,cb)=>{
+		cb(null,file.originalname);
+	}
+})
+const upload = multer({storage:fileStorageEngine})
+    
 
 // user
 router.post('/api/create/user', userHandler.register)
@@ -19,7 +27,7 @@ router.get('/api/get/user/:phoneNumber',authentication.ensureRole(['superAdmin',
 
 
 // services
-router.post('/api/create/service', authentication.ensureRole(['superAdmin']), serviceHandler.createService)
+router.post('/api/create/service', authentication.ensureRole(['superAdmin']),serviceHandler.createService)
 router.patch('/api/update/service/:serviceId', authentication.ensureRole(['superAdmin']), serviceHandler.updateService)
 router.get('/api/get/service/', authentication.ensureRole(['superAdmin', 'user', 'admin']), serviceHandler.getServices)
 router.delete('/api/delete/service/:serviceId',authentication.ensureRole(['superAdmin']), serviceHandler.deleteServiceById)
@@ -35,5 +43,10 @@ router.get('/api/get/holidayList',authentication.ensureRole(['superAdmin', 'user
 
 //Admin
 router.post('/api/get/adminStats',authentication.ensureRole(['superAdmin','admin']),adminHandler.adminStats)
+router.post('/api/temp',upload.single('image'),function(req,res){
+	console.log("sdf")
+	console.log(req.file);
+
+})
 
 module.exports = router

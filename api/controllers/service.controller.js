@@ -1,7 +1,7 @@
 const dayjs = require('dayjs');
 const utc = require('dayjs/plugin/utc')
-dayjs.extend(utc)
 
+dayjs.extend(utc)
 
 const Services = require('../models/services.model');
 function formatData(data) {
@@ -37,8 +37,9 @@ function formatData(data) {
 	return service;
 }
 
-exports.createService = async (req, res) => {
+exports.createService =  async function (req, res)  {
 	try {
+		console.log(req.file)
 		const service = formatData(req);
 		service.createdBy = req.user._id;
 		await service.save();
