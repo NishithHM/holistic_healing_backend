@@ -10,8 +10,7 @@ const secretKey = process.env.AWS_SECRET_KEY;
 //console.log(region)
 
 const s3 = new S3({
-  accessKeyId:"AKIAVQ2J72GQZYCKIY5W",
-  secretAccessKey:"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"
+
 })
 
 async function uploadFile(file) {
